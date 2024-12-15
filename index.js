@@ -30,7 +30,7 @@ function run_the_check(server) {
 async function checkMembers(discord_guild, members) {
     let guild_members = {};
 
-    let important_roles = [config.roles.verified, config.roles.guild_member];
+    let important_roles = [config.roles.guild_member];
 
     for (const cleaned_up_guild of Object.values(config.guilds)) {
         important_roles.push(cleaned_up_guild.member_role);
