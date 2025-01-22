@@ -240,8 +240,10 @@ async function checkMembers(discord_guild, members) {
             // Resets nick if needed.
             // #####################################################
     
-            if(verified_as !== null && verified_as !== undefined){
-                await removeRole(member_entry, config.roles.verified);
+            if(verified_as === null || verified_as === undefined){
+                if(member_entry.roles.cache.has(config.roles.verified)){
+                    await removeRole(member_entry, config.roles.verified);
+                }
             }
     
             if(config.features.reset_nick){
