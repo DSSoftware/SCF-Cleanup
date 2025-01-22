@@ -245,6 +245,11 @@ async function checkMembers(discord_guild, members) {
                     await removeRole(member_entry, config.roles.verified);
                 }
             }
+            else{
+                if(!member_entry.roles.cache.has(config.roles.verified)){
+                    await addRole(member_entry, config.roles.verified);
+                }
+            }
     
             if(config.features.reset_nick){
                 player_ign = await translateUUIDToNick(verified_as);
