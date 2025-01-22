@@ -64,10 +64,12 @@ async function checkMembers(discord_guild, members) {
     important_roles = [...new Set(important_roles)];
 
     let member_counter = 0;
+    let verification_counter = 0;
     let global_member_counter = 0;
     let processed_counter = 0;
 
     let important_members = [];
+    let verification_check = [];
 
     for (const member_entry of members) {
         const member = member_entry[1];
@@ -85,6 +87,10 @@ async function checkMembers(discord_guild, members) {
         }
 
         if (!has_important_roles) {
+            if(config.features.recheck_verification){
+                verification_counter++;
+                verification_check.push(member);
+            }
             continue;
         }
 
@@ -94,14 +100,8 @@ async function checkMembers(discord_guild, members) {
 
     sendStartMessage();
 
-    let player_checking = 0;
-
     for (const member_entry of important_members) {
-        const member = member_entry;
-
-        player_checking++;
-
-        let user_id = member.user.id;
+        let user_id = member_entry.user.id;
         let verified_as = null;
 
         try {
@@ -124,12 +124,12 @@ async function checkMembers(discord_guild, members) {
 
         let needed_roles = [];
 
-        if (member.roles.cache.has(config.roles.skip_check)) {
+        if (member_entry.roles.cache.has(config.roles.skip_check)) {
             processed_counter++;
             let channel = discord_guild.channels.cache.get(config.discord.logging);
             const roleAddEmbed = new EmbedBuilder()
                 .setColor(0x008000)
-                .setDescription(`Skipped a player <@${member.user.id}> | ERROR_SKIPPED_PLAYER`);
+                .setDescription(`Skipped a player <@${member_entry.user.id}> | ERROR_SKIPPED_PLAYER`);
 
             channel.send({ content: "", embeds: [roleAddEmbed] });
             continue;
@@ -145,15 +145,15 @@ async function checkMembers(discord_guild, members) {
             needed_roles.push(config.roles.verified);
         }
 
-        if(config.preferences.reset_nick){
+        if(config.features.reset_nick){
             player_ign = await translateUUIDToNick(verified_as);
             if (player_ign != false) {
-                if (member.nickname != player_ign) {
-                    await changeNick(member, player_ign, member.nickname);
+                if (member_entry.nickname != player_ign) {
+                    await changeNick(member_entry, player_ign, member_entry.nickname);
                 }
             } else {
-                if (member.nickname != null) {
-                    await changeNick(member, null, member.nickname);
+                if (member_entry.nickname != null) {
+                    await changeNick(member_entry, null, member_entry.nickname);
                 }
             }
         }
@@ -184,14 +184,14 @@ async function checkMembers(discord_guild, members) {
         }
 
         for (const important_role of important_roles) {
-            if (member.roles.cache.has(important_role)) {
+            if (member_entry.roles.cache.has(important_role)) {
                 if(!needed_roles.includes(important_role)){
-                    await removeRole(member, important_role);
+                    await removeRole(member_entry, important_role);
                 }
             }
             else{
                 if(needed_roles.includes(important_role)){
-                    await addRole(member, important_role);
+                    await addRole(member_entry, important_role);
                 }
             }
         }
@@ -199,13 +199,72 @@ async function checkMembers(discord_guild, members) {
         if (player_ign == false) {
             player_ign = undefined;
         }
-        let player_identifier = player_ign ?? member.user.username;
+        let player_identifier = player_ign ?? member_entry.user.username;
         processed_counter++;
         sendLog("Finished checking user " + player_identifier + ` (${processed_counter} / ${member_counter})`);
     }
 
+    if(config.features.recheck_verification){
+        let processed_counter = 0;
+        sendVerificationRecheckMessage();
+        for (const member_entry of verification_check) {
+            let user_id = member_entry.user.id;
+            let verified_as = null;
+    
+            try {
+                verified_as = await getLinkedMC(user_id);
+                if (verified_as === false) {
+                    throw "Invalid response for verification request.";
+                }
+            } catch (e) {
+                sendError("Unable to obtain verification data.");
+                continue;
+            }
+    
+            let player_ign = undefined;
+    
+            if (member_entry.roles.cache.has(config.roles.skip_check)) {
+                processed_counter++;
+                let channel = discord_guild.channels.cache.get(config.discord.logging);
+                const roleAddEmbed = new EmbedBuilder()
+                    .setColor(0x008000)
+                    .setDescription(`Skipped a player <@${member_entry.user.id}> | ERROR_SKIPPED_PLAYER`);
+    
+                channel.send({ content: "", embeds: [roleAddEmbed] });
+                continue;
+            }
+    
+            // #####################################################
+            // Verification Recheck
+            // Checks the VERIFIED role.
+            // Resets nick if needed.
+            // #####################################################
+    
+            if(verified_as !== null && verified_as !== undefined){
+                await removeRole(member_entry, config.roles.verified);
+            }
+    
+            if(config.features.reset_nick){
+                player_ign = await translateUUIDToNick(verified_as);
+                if (player_ign != false) {
+                    if (member_entry.nickname != player_ign) {
+                        await changeNick(member_entry, player_ign, member_entry.nickname);
+                    }
+                }
+            }
+    
+            if (player_ign == false) {
+                player_ign = undefined;
+            }
+            let player_identifier = player_ign ?? member_entry.user.username;
+            processed_counter++;
+            sendLog("Finished reverifying user " + player_identifier + ` (${processed_counter} / ${member_counter})`);
+        }
+    }
+
     sendSuccessMessage();
     important_members.length = 0;
+    verification_check.length = 0;
 
     async function addRole(member, role) {
         return new Promise(async (resolve, reject) => {
@@ -302,6 +361,27 @@ async function checkMembers(discord_guild, members) {
                 .addFields(
                     { name: "Overall Member Count", value: `${global_member_counter}` },
                     { name: "Members with recheck roles", value: `${member_counter}` }
+                )
+                .setTimestamp()
+                .setFooter({ text: "by ArtemDev" });
+
+            await channel.send({ embeds: [startEmbed] });
+        } catch (e) {
+            sendError("Failed to send start message!");
+            console.log(e);
+        }
+    }
+
+    async function sendVerificationRecheckMessage() {
+        try {
+            let channel = discord_guild.channels.cache.get(config.discord.logging);
+            const startEmbed = new EmbedBuilder()
+                .setColor(0x008000)
+                .setTitle("Verification Recheck Was Started")
+                .setAuthor({ name: "SCF Guild" })
+                .addFields(
+                    { name: "Overall Member Count", value: `${global_member_counter}` },
+                    { name: "Verified Members", value: `${verification_counter}` }
                 )
                 .setTimestamp()
                 .setFooter({ text: "by ArtemDev" });
