@@ -265,7 +265,7 @@ async function checkMembers(discord_guild, members) {
             }
             let player_identifier = player_ign ?? member_entry.user.username;
             processed_counter++;
-            sendLog("Finished reverifying user " + player_identifier + ` (${processed_counter} / ${member_counter})`);
+            sendLog("Finished reverifying user " + player_identifier + ` (${processed_counter} / ${verification_counter})`);
         }
     }
 
