@@ -59,11 +59,6 @@ let guild_configuration = {
             guild_id: "6125800e8ea8c92e1833e851",
             member_role: "1088508095258439710",
             roles: {}
-        },
-        "SB Dungeons": {
-            guild_id: "65ab640e8ea8c9dca6f381d0",
-            member_role: "1198722069433688194",
-            roles: {}
         }
     }
 };
