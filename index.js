@@ -145,8 +145,9 @@ async function checkMembers(discord_guild, members) {
             needed_roles.push(config.roles.verified);
         }
 
+        player_ign = await translateUUIDToNick(verified_as);
+
         if(config.features.reset_nick){
-            player_ign = await translateUUIDToNick(verified_as);
             if (player_ign != false) {
                 if (member_entry.nickname != player_ign) {
                     await changeNick(member_entry, player_ign, member_entry.nickname);
@@ -265,7 +266,7 @@ async function checkMembers(discord_guild, members) {
             }
             let player_identifier = player_ign ?? member_entry.user.username;
             processed_counter++;
-            sendLog("Finished reverifying user " + player_identifier + ` (${processed_counter} / ${verification_counter})`);
+            sendLog("Finished reverifying user " + player_identifier + ` (${processed_counter} / ${member_counter})`);
         }
     }
 

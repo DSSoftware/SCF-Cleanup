@@ -58,7 +58,7 @@ let guild_configuration = {
         "SB Masters Jr": {
             guild_id: "6125800e8ea8c92e1833e851",
             member_role: "1088508095258439710",
-            roles: {}
+            roles: {},
         }
     }
 };
