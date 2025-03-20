@@ -144,6 +144,9 @@ async function checkMembers(discord_guild, members) {
         if(verified_as !== null && verified_as !== undefined){
             needed_roles.push(config.roles.verified);
         }
+        else{
+            await getLinkedMC(user_id, true);
+        }
 
         player_ign = await translateUUIDToNick(verified_as);
 

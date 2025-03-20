@@ -21,10 +21,13 @@ module.exports = {
         }
     },
 
-    getLinkedMC(discord_id) {
+    getLinkedMC(discord_id, verbose=false) {
         return new Promise(async (resolve, reject) => {
             const request_url = `${config.verification.provider}${discord_id}`;
             sendGetRequest(request_url).then((data) => {
+                if(verbose){
+                    console.log(data);
+                }
                 resolve(data.uuid);
             }, () => {
                 resolve(false);
