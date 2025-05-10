@@ -4,7 +4,7 @@ let guild_configuration = {
     SCF: {
         SCF: {
             guild_id: "638b9e6a8ea8c990c96e91f7",
-            member_role: "1224064506146066594",
+            member_role: "1370633723577634926",
             roles: {
                 senior: "1215996847873589378",
                 active: "1147667882315100200",
@@ -12,7 +12,7 @@ let guild_configuration = {
         },
         SCL: {
             guild_id: "66099e8a8ea8c9d0525e1bdd",
-            member_role: "1224064565071970425",
+            member_role: "1370633860299358310",
             roles: {
                 senior: "1215996847873589378",
                 active: "1147667882315100200",
