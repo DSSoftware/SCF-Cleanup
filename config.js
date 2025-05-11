@@ -11,7 +11,7 @@ let guild_configuration = {
             },
         },
         SCL: {
-            guild_id: "66099e8a8ea8c9d0525e1bdd",
+            guild_id: "607a0d7c8ea8c9c0ff983976",
             member_role: "1370633860299358310",
             roles: {
                 senior: "1215996847873589378",
@@ -26,7 +26,7 @@ let guild_configuration = {
             roles: {},
         },
         SCL: {
-            guild_id: "66099e8a8ea8c9d0525e1bdd",
+            guild_id: "607a0d7c8ea8c9c0ff983976",
             member_role: "1227984925106503680",
             roles: {},
         },
