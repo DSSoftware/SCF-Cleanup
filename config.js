@@ -63,19 +63,30 @@ let guild_configuration = {
     }
 };
 
+let features_configuration = {
+    SCF: {
+        reset_nick: true,
+        recheck_verification: true,
+        nick_roles: {
+            "cat": "1372867965581791264"
+        }
+    },
+    SBU: {
+        reset_nick: false,
+        recheck_verification: false,
+        nick_roles: {}
+    }
+}
+
 const guilds = guild_configuration?.[process.env.GUILD_CONFIG];
-let features = {
-    reset_nick: false,
-    recheck_verification: false
-};
+const features = features_configuration?.[process.env.GUILD_CONFIG];
 
 if (guilds == undefined) {
     throw "Invalid Guild Configuration. Check GUILD_CONFIG var.";
 }
 
-if(process.env.GUILD_CONFIG == "SCF"){
-    features.reset_nick = true;
-    features.recheck_verification = true;
+if (features == undefined) {
+    throw "Invalid Guild Configuration. Check GUILD_CONFIG var.";
 }
 
 module.exports = {

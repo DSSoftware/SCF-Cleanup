@@ -185,6 +185,28 @@ async function checkMembers(discord_guild, members) {
             }
         }
 
+        if (player_ign != null && player_ign != undefined) {
+            for (const custom_role of Object.entries(config.features.nick_roles)) {
+                let start_with = custom_role[0];
+                let role = custom_role[1];
+                let issue_role = false;
+
+                if (player_ign.toLowerCase().startsWith(start_with)) {
+                    issue_role = true;
+                }
+
+                if (member_entry.roles.cache.has(role)) {
+                    if (!issue_role) {
+                        await removeRole(member_entry, role);
+                    }
+                } else {
+                    if (issue_role) {
+                        await addRole(member_entry, role);
+                    }
+                }
+            }
+        }
+
         for (const important_role of important_roles) {
             if (member_entry.roles.cache.has(important_role)) {
                 if (!needed_roles.includes(important_role)) {
