@@ -3,6 +3,7 @@ require("dotenv").config();
 let guild_configuration = {
     SCF: {
         SCF: {
+            is_guild: true,
             guild_id: "638b9e6a8ea8c990c96e91f7",
             member_role: "1370633723577634926",
             roles: {
@@ -11,6 +12,7 @@ let guild_configuration = {
             },
         },
         SCL: {
+            is_guild: true,
             guild_id: "607a0d7c8ea8c9c0ff983976",
             member_role: "1370633860299358310",
             roles: {
@@ -19,6 +21,7 @@ let guild_configuration = {
             },
         },
         CatCult: {
+            is_guild: false,
             guild_id: "6834af778ea8c9156ef24cf3",
             member_role: "1372867965581791264",
             roles: {},

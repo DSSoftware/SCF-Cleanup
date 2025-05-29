@@ -168,10 +168,13 @@ async function checkMembers(discord_guild, members) {
 
         if (verified_as != null && verified_as != undefined) {
             if (guild_members?.[verified_as]?.uuid == verified_as) {
-                needed_roles.push(config.roles.guild_member);
-
                 const player_rank = guild_members?.[verified_as]?.rank ?? "Member";
                 const player_guild = guild_members?.[verified_as]?.guild_data;
+
+                if(player_guild.is_guild){
+                    needed_roles.push(config.roles.guild_member);
+                }
+                
 
                 if (player_guild?.member_role !== undefined) {
                     needed_roles.push(player_guild?.member_role);
