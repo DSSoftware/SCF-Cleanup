@@ -29,41 +29,49 @@ let guild_configuration = {
     },
     SBU: {
         SCF: {
+            is_guild: true,
             guild_id: "638b9e6a8ea8c990c96e91f7",
             member_role: "1198654827668967544",
             roles: {},
         },
         SCL: {
+            is_guild: true,
             guild_id: "607a0d7c8ea8c9c0ff983976",
             member_role: "1227984925106503680",
             roles: {},
         },
         "SB University": {
+            is_guild: true,
             guild_id: "6111fcb48ea8c95240436c57",
             member_role: "803695821094125585",
             roles: {},
         },
         "SB Alpha Psi": {
+            is_guild: true,
             guild_id: "604a765e8ea8c962f2bb3b7a",
             member_role: "821080619332796437",
             roles: {},
         },
         "SB Lambda Pi": {
+            is_guild: true,
             guild_id: "60a16b088ea8c9bb7f6d9052",
             member_role: "843871813481267270",
             roles: {},
         },
         "SB Sigma Chi": {
+            is_guild: true,
             guild_id: "60352e858ea8c90182d34af7",
             member_role: "1099688245383663776",
             roles: {},
         },
         "SB Masters": {
+            is_guild: true,
             guild_id: "570940fb0cf2d37483e106b3",
             member_role: "944524838553399326",
             roles: {},
         },
         "SB Masters Jr": {
+            is_guild: true,
             guild_id: "6125800e8ea8c92e1833e851",
             member_role: "1088508095258439710",
             roles: {},
