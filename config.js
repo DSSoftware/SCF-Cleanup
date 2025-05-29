@@ -18,6 +18,11 @@ let guild_configuration = {
                 active: "1147667882315100200",
             },
         },
+        CatCult: {
+            guild_id: "6834af778ea8c9156ef24cf3",
+            member_role: "1372867965581791264",
+            roles: {},
+        }
     },
     SBU: {
         SCF: {
@@ -68,7 +73,7 @@ let features_configuration = {
         reset_nick: true,
         recheck_verification: true,
         nick_roles: {
-            "cat": "1372867965581791264"
+            //"cat": "1372867965581791264"
         }
     },
     SBU: {
