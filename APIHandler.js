@@ -12,7 +12,7 @@ module.exports = {
 
     async getGuildData(guild_id) {
         try{
-            let response = await sendGetRequest(`https://api.hypixel.net/v2/guild?key=${config.tokens.hypixel}&id=${guild_id}`);
+            let response = await sendGetRequest(`https://hypixel.dssoftware.ru/v2/guild?key=${config.tokens.hypixel}&id=${guild_id}`);
             return response;
         }
         catch(e){
