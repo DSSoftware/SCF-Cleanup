@@ -75,6 +75,12 @@ let guild_configuration = {
             guild_id: "6125800e8ea8c92e1833e851",
             member_role: "1088508095258439710",
             roles: {},
+        },
+        "Firelink Shrine": {
+            is_guild: true,
+            guild_id: "5b8930350cf24573ab84c3fd",
+            member_role: "1384468352185143297",
+            roles: {},
         }
     }
 };
