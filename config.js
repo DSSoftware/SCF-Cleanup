@@ -137,6 +137,6 @@ module.exports = {
     features: features,
     preferences: {
         refresh_interval: 6 * 60 * 60 * 1000,
-        queues: 5
+        queues: 0
     },
 };
