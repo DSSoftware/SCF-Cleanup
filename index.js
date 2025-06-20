@@ -104,6 +104,10 @@ async function checkMembers(discord_guild, members) {
     let members_queue = [];
 
     function queueMember(member_entry) {
+        console.log("queue member was called, queueing the member", member_entry);
+        members_queue.push(new Promise(async (resolve, reject) => {
+            console.log("quue promise was called, something wrong is going on", member_entry);
+        }));
         /*members_queue.push(new Promise(async (resolve, reject) => {
             try {
                 let user_id = member_entry.user.id;
