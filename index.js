@@ -238,8 +238,12 @@ async function checkMembers(discord_guild, members) {
     function queue_handler() {
         return new Promise(async (qhr) => {
             while (members_queue.length > 0) {
-                let job = members_queue.pop();
-                const result = await Promise.any([
+                let job = members_queue.shift();
+
+                if (!job) {
+                    break;
+                }
+                const result = await Promise.race([
                     reviewMember(job),
                     new Promise((resolve) => {
                         setTimeout(() => resolve('timeout'), 60000);
