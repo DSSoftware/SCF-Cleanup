@@ -198,8 +198,8 @@ async function checkMembers(discord_guild, members) {
                 for (const important_role of important_roles) {
                     if (member_entry.roles.cache.has(important_role)) {
                         if (!needed_roles.includes(important_role)) {
-                            if(important_role == config.roles.verified){
-                                if(!config.features.reset_unverified){
+                            if (important_role == config.roles.verified) {
+                                if (!config.features.reset_unverified) {
                                     continue;
                                 }
                             }
@@ -235,22 +235,26 @@ async function checkMembers(discord_guild, members) {
 
     out_of_members = important_members.length;
 
-    async function queue_handler() {
-        while (members_queue.length > 0) {
-            let job = members_queue.pop();
-            const result = await Promise.any([
-                job,
-                new Promise((resolve) => {
-                    setTimeout(() => resolve('timeout'), 60000);
-                })
-            ]);
+    function queue_handler() {
+        return new Promise(async (qhr) => {
+            while (members_queue.length > 0) {
+                let job = members_queue.pop();
+                const result = await Promise.any([
+                    job,
+                    new Promise((resolve) => {
+                        setTimeout(() => resolve('timeout'), 60000);
+                    })
+                ]);
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-            if (result === 'timeout') {
-                sendWarn('Job timed out after 60 seconds, skipping...');
+                if (result === 'timeout') {
+                    sendWarn('Job timed out after 60 seconds, skipping...');
+                }
             }
-        }
+
+            qhr();
+        });
     }
 
     let queues = [];
