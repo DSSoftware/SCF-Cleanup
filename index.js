@@ -236,7 +236,7 @@ async function checkMembers(discord_guild, members) {
     out_of_members = important_members.length;
 
     function queue_handler() {
-        return new Promise(async (qhr) => {
+        /*return new Promise(async (qhr) => {
             while (members_queue.length > 0) {
                 let job = members_queue.pop();
                 const result = await Promise.any([
@@ -254,7 +254,7 @@ async function checkMembers(discord_guild, members) {
             }
 
             qhr();
-        });
+        });*/
     }
 
     let queues = [];
