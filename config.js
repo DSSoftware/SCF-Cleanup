@@ -89,13 +89,15 @@ let features_configuration = {
     SCF: {
         reset_nick: true,
         recheck_verification: true,
+        reset_unverified: true,
         nick_roles: {
             //"cat": "1372867965581791264"
         }
     },
     SBU: {
         reset_nick: false,
-        recheck_verification: false,
+        recheck_verification: true,
+        reset_unverified: false,
         nick_roles: {}
     }
 }

@@ -67,6 +67,7 @@ async function checkMembers(discord_guild, members) {
     let verification_counter = 0;
     let global_member_counter = 0;
     let processed_counter = 0;
+    let out_of_members = 0;
 
     let important_members = [];
     let verification_check = [];
@@ -102,7 +103,7 @@ async function checkMembers(discord_guild, members) {
 
     let members_queue = [];
 
-    function verifyMember(member_entry) {
+    function verifyMember(member_entry, isImportant) {
         return new Promise(async (resolve, reject) => {
             try {
                 let user_id = member_entry.user.id;
@@ -123,6 +124,14 @@ async function checkMembers(discord_guild, members) {
                     sendError("Unable to obtain verification data.");
                     resolve();
                     return;
+                }
+
+                if(!isImportant && verified_as == null){
+                    if(!config.features.reset_unverified){
+                        console.log("Non-Important member is unverified, but was skipped.")
+                        resolve();
+                        return;
+                    }
                 }
 
                 let player_ign = undefined;
@@ -212,7 +221,7 @@ async function checkMembers(discord_guild, members) {
                 let player_identifier = player_ign ?? member_entry.user.username;
                 processed_counter++;
                 sendLog(
-                    "Finished checking user " + player_identifier + ` (${processed_counter} / ${verification_counter})`
+                    "Finished checking user " + player_identifier + ` (${processed_counter} / ${out_of_members})`
                 );
             }
             catch (e) {
@@ -225,6 +234,8 @@ async function checkMembers(discord_guild, members) {
     for (const member_entry of important_members) {
         members_queue.push(verifyMember(member_entry));
     }
+
+    out_of_members = important_members.length;
 
     async function queue_handler() {
         while (members_queue.length > 0) {
@@ -258,6 +269,8 @@ async function checkMembers(discord_guild, members) {
         for (const member_entry of verification_check) {
             members_queue.push(verifyMember(member_entry));
         }
+
+        out_of_members = verification_check.length;
 
         for (let i = 0; i < config.preferences.queues; i++) {
             queues.push(queue_handler());
