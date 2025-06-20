@@ -103,12 +103,8 @@ async function checkMembers(discord_guild, members) {
 
     let members_queue = [];
 
-    function queueMember(member_entry) {
-        console.log("queue member was called, queueing the member", member_entry.user.id);
-        members_queue.push(new Promise(async (resolve, reject) => {
-            console.log("quue promise was called, something wrong is going on", member_entry.user.id);
-        }));
-        /*members_queue.push(new Promise(async (resolve, reject) => {
+    function reviewMember(member_entry) {
+        return new Promise(async (resolve) => {
             try {
                 let user_id = member_entry.user.id;
                 let verified_as = null;
@@ -230,27 +226,25 @@ async function checkMembers(discord_guild, members) {
                 console.log(e);
                 resolve();
             }
-        }));*/
+        });
     }
 
     for (const member_entry of important_members) {
-        queueMember(member_entry);
+        members_queue.push(member_entry);
     }
 
     out_of_members = important_members.length;
 
     function queue_handler() {
-        /*return new Promise(async (qhr) => {
+        return new Promise(async (qhr) => {
             while (members_queue.length > 0) {
                 let job = members_queue.pop();
                 const result = await Promise.any([
-                    job,
+                    reviewMember(job),
                     new Promise((resolve) => {
                         setTimeout(() => resolve('timeout'), 60000);
                     })
                 ]);
-
-                await new Promise(resolve => setTimeout(resolve, 1000));
 
                 if (result === 'timeout') {
                     sendWarn('Job timed out after 60 seconds, skipping...');
@@ -258,7 +252,7 @@ async function checkMembers(discord_guild, members) {
             }
 
             qhr();
-        });*/
+        });
     }
 
     let queues = [];
