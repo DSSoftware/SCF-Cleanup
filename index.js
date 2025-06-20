@@ -269,7 +269,7 @@ async function checkMembers(discord_guild, members) {
         processed_counter = 0;
         sendVerificationRecheckMessage();
         for (const member_entry of verification_check) {
-            queueMember(member_entry);
+            members_queue.push(member_entry);
         }
 
         out_of_members = verification_check.length;
