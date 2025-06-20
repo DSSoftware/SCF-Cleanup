@@ -103,8 +103,8 @@ async function checkMembers(discord_guild, members) {
 
     let members_queue = [];
 
-    function verifyMember(member_entry) {
-        return new Promise(async (resolve, reject) => {
+    function queueMember(member_entry) {
+        members_queue.push(new Promise(async (resolve, reject) => {
             try {
                 let user_id = member_entry.user.id;
                 let verified_as = null;
@@ -226,11 +226,11 @@ async function checkMembers(discord_guild, members) {
                 console.log(e);
                 resolve();
             }
-        })
+        }));
     }
 
     for (const member_entry of important_members) {
-        members_queue.push(verifyMember(member_entry));
+        queueMember(member_entry);
     }
 
     out_of_members = important_members.length;
@@ -263,7 +263,7 @@ async function checkMembers(discord_guild, members) {
         queues.push(queue_handler());
     }
 
-    Promise.all(queues);
+    await Promise.all(queues);
 
     queues = [];
 
@@ -271,7 +271,7 @@ async function checkMembers(discord_guild, members) {
         processed_counter = 0;
         sendVerificationRecheckMessage();
         for (const member_entry of verification_check) {
-            members_queue.push(verifyMember(member_entry));
+            queueMember(member_entry);
         }
 
         out_of_members = verification_check.length;
@@ -280,7 +280,7 @@ async function checkMembers(discord_guild, members) {
             queues.push(queue_handler());
         }
 
-        Promise.all(queues);
+        await Promise.all(queues);
     }
 
     sendSuccessMessage();
