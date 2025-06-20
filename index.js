@@ -221,6 +221,7 @@ async function checkMembers(discord_guild, members) {
                 sendLog(
                     "Finished checking user " + player_identifier + ` (${processed_counter} / ${out_of_members})`
                 );
+                resolve();
             }
             catch (e) {
                 console.log(e);
