@@ -103,7 +103,7 @@ async function checkMembers(discord_guild, members) {
 
     let members_queue = [];
 
-    function verifyMember(member_entry, isImportant) {
+    function verifyMember(member_entry) {
         return new Promise(async (resolve, reject) => {
             try {
                 let user_id = member_entry.user.id;
@@ -124,14 +124,6 @@ async function checkMembers(discord_guild, members) {
                     sendError("Unable to obtain verification data.");
                     resolve();
                     return;
-                }
-
-                if(!isImportant && verified_as == null){
-                    if(!config.features.reset_unverified){
-                        console.log("Non-Important member is unverified, but was skipped.")
-                        resolve();
-                        return;
-                    }
                 }
 
                 let player_ign = undefined;
@@ -206,6 +198,12 @@ async function checkMembers(discord_guild, members) {
                 for (const important_role of important_roles) {
                     if (member_entry.roles.cache.has(important_role)) {
                         if (!needed_roles.includes(important_role)) {
+                            if(important_role == config.roles.verified){
+                                if(!config.features.reset_unverified){
+                                    continue;
+                                }
+                            }
+
                             await removeRole(member_entry, important_role);
                         }
                     } else {
@@ -240,7 +238,7 @@ async function checkMembers(discord_guild, members) {
     async function queue_handler() {
         while (members_queue.length > 0) {
             let job = members_queue.pop();
-            const result = await Promise.race([
+            const result = await Promise.any([
                 job,
                 new Promise((resolve) => {
                     setTimeout(() => resolve('timeout'), 60000);
