@@ -245,6 +245,8 @@ async function checkMembers(discord_guild, members) {
                 })
             ]);
 
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             if (result === 'timeout') {
                 sendWarn('Job timed out after 60 seconds, skipping...');
             }
