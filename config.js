@@ -80,7 +80,9 @@ let guild_configuration = {
             is_guild: true,
             guild_id: "5b8930350cf24573ab84c3fd",
             member_role: "1384468352185143297",
-            roles: {},
+            roles: {
+                "ashen one": "1387805370281361440"
+            },
         }
     }
 };
