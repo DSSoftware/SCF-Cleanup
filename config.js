@@ -42,7 +42,7 @@ let guild_configuration = {
         },
         "SB University": {
             is_guild: true,
-            guild_id: "6111fcb48ea8c95240436c57",
+            guild_id: "600846008ea8c9e004b0396f",
             member_role: "803695821094125585",
             roles: {},
         },
